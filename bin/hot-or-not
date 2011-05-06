@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'rubygems'
-require File.dirname(__FILE__) + '/../lib/api-compare'
+require File.dirname(__FILE__) + '/../lib/hot-or-not'
 require 'optparse'
 
 defaults = {
@@ -33,9 +33,9 @@ options = defaults.merge options
 
 yaml_file = ARGV[0]
 unless File.exists? yaml_file
-  put "hot-or-not: no such file - #{yaml_file}"
+  puts "hot-or-not: no such file - #{yaml_file}"
   exit
 end
 
-urls = ApiCompare::CompareUrl.load_from yaml_file
-ApiCompare::Runner.new(urls, options[:output_directory]).run!
+urls = HotOrNot::CompareUrl.load_from yaml_file
+HotOrNot::Runner.new(urls, options[:output_directory]).run!

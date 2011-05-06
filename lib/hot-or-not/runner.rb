@@ -1,4 +1,4 @@
-module ApiCompare
+module HotOrNot
   class Runner
     def initialize(urls, output_dir)
       @urls, @output_dir = urls, output_dir

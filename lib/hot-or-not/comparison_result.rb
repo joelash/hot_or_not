@@ -1,4 +1,4 @@
-module ApiCompare
+module HotOrNot
   class ComparisonResult
 
     class << self

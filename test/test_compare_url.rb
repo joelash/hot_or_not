@@ -1,6 +1,6 @@
 require 'helper'
 
-module ApiCompare
+module HotOrNot
   class TestCompareUrl < Test::Unit::TestCase
     context "load from file" do
       setup do

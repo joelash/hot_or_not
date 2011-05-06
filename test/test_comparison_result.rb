@@ -1,6 +1,6 @@
 require 'helper'
 
-module ApiCompare
+module HotOrNot
   class TestComparisonResult < Test::Unit::TestCase
     context "comparing results" do
       setup do

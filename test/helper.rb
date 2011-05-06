@@ -13,7 +13,7 @@ require 'mocha'
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
-require 'api-compare'
+require 'hot-or-not'
 
 class Test::Unit::TestCase
   def assert_false(truth, message=nil)
@@ -27,7 +27,7 @@ class Test::Unit::TestCase
   end
 end
 
-module ApiCompare
+module HotOrNot
   class FakeResponse
     attr_reader :body, :code
     def initialize(body, code = '200')

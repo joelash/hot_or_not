@@ -1,4 +1,4 @@
-module ApiCompare
+module HotOrNot
   class CompareUrl
 
     attr_reader :url
