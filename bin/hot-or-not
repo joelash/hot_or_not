@@ -1,0 +1,41 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require File.dirname(__FILE__) + '/../lib/api-compare'
+require 'optparse'
+
+defaults = {
+  :output_directory => 'test_results'
+}
+
+options = {}
+parser = ::OptionParser.new do |opts|
+  opts.banner = "Usage: hot-or-not [options] URL_FILE"
+  opts.on("-o", "--output-dir", "Ouput directory. DEFAULT: #{defaults[:output_directory]}") do |d|
+    options[:output_directory] = d
+  end 
+
+  opts.on_tail("-h", "--help", "Show this message") do
+    puts opts
+    exit
+  end
+end
+
+begin 
+  parser.parse!
+rescue OptionParser::InvalidOption => e
+  puts e.message
+  puts parser
+  exit
+end
+
+options = defaults.merge options
+
+yaml_file = ARGV[0]
+unless File.exists? yaml_file
+  put "hot-or-not: no such file - #{yaml_file}"
+  exit
+end
+
+urls = ApiCompare::CompareUrl.load_from yaml_file
+ApiCompare::Runner.new(urls, options[:output_directory]).run!
