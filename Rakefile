@@ -21,7 +21,7 @@ Jeweler::Tasks.new do |gem|
   gem.description = %Q{Run this with a new version of your site comparing to current version to verify no break changes are made to your api's}
   gem.email = "asher.friedman@gmail.com"
   gem.authors = ["Joel Friedman"]
-  gem.executables = ['bin/hot-or-not']
+  gem.executables = ['hot-or-not']
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new
