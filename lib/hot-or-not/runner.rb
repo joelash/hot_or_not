@@ -52,7 +52,7 @@ module HotOrNot
     end
 
     def output_error result_hash
-      to_console "Error:#{$/}Retreiving #{result_hash[:url].url} raised error: #{result_hash[:error].message}"
+      to_console "Error:#{$/}Retreiving #{result_hash[:url].url} raised error: #{result_hash[:error].message}#{$/}#{result_hash[:error].backtrace.join($/)}"
     end
     
     def to_console(message)

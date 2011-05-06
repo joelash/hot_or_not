@@ -55,7 +55,7 @@ module HotOrNot
         h = JSON.parse result.body
         JSON.pretty_generate h
       else
-        body
+        result.body
       end
     end
 

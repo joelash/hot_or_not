@@ -29,9 +29,10 @@ end
 
 module HotOrNot
   class FakeResponse
-    attr_reader :body, :code
-    def initialize(body, code = '200')
+    attr_reader :body, :code, :headers
+    def initialize(body, code = '200', headers = {})
       @body, @code = body, code
+      @headers = { :content_type => 'html' }.merge headers
     end
   end
 end
