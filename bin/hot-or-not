@@ -15,6 +15,12 @@ parser = ::OptionParser.new do |opts|
     options[:output_directory] = d
   end 
 
+  opts.on_tail("--example-file", "Output contents of example file") do
+    puts
+    puts File.read(File.dirname(__FILE__) + '/../test/data/simple_urls.yml')
+    exit
+  end
+
   opts.on_tail("-h", "--help", "Show this message") do
     puts opts
     exit
