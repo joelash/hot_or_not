@@ -1,7 +1,7 @@
 module HotOrNot
   class CompareUrl
 
-    attr_reader :url
+    attr_reader :url, :base_a, :base_b
 
     def initialize(name, url, base_a, base_b)
       @name, @url, @base_a, @base_b = name, url, base_a, base_b
@@ -12,7 +12,7 @@ module HotOrNot
     end
 
     def short_name
-      @short_name ||= underscore @name
+      @short_name ||= @name.underscore.gsub(/\s+/, '_')
     end
 
     def side_a
@@ -29,16 +29,6 @@ module HotOrNot
       contents['comparisons'].map do |h|
         CompareUrl.new h['name'], h['url'], side_a, side_b
       end
-    end
-
-    private
-    def underscore str
-      str.gsub(/::/, '/').
-        gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
-        gsub(/([a-z\d])([A-Z])/,'\1_\2').
-        gsub(/\s+/, '_').
-        tr("-", "_").
-        downcase
     end
   end
 end

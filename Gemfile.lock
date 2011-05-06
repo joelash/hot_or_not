@@ -2,6 +2,7 @@ GEM
   remote: http://rubygems.org/
   specs:
     diffy (2.0.1)
+    facets (2.9.1)
     git (1.2.5)
     jeweler (1.6.0)
       bundler (~> 1.0.0)
@@ -21,6 +22,7 @@ PLATFORMS
 DEPENDENCIES
   bundler (~> 1.0.0)
   diffy (~> 2.0.1)
+  facets (~> 2.9.1)
   jeweler (~> 1.6.0)
   mocha
   rcov

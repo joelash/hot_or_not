@@ -12,12 +12,10 @@ module HotOrNot
       end
     end
 
-    attr_reader :side_a_body, :side_b_body, :message
+    attr_reader :message
 
     def initialize(compare_url, side_a_results, side_b_results)
       @compare_url, @side_a_results, @side_b_results = compare_url, side_a_results, side_b_results
-      @side_a_body = @side_a_results.body
-      @side_b_body = @side_b_results.body
       @message, @diff = '', ''
       init
     end
@@ -26,21 +24,39 @@ module HotOrNot
       @success
     end
 
+    def side_a_body
+      @side_a_body ||= body_by_content_type @side_a_results
+    end
+
+    def side_b_body
+      @side_b_body ||= body_by_content_type @side_b_results
+    end
+
     def diff(format = :text)
       @diff.to_s format
     end
 
     def output_to_files_in(directory)
-      write_to directory, "side_a", @side_a_results.body
-      write_to directory, "side_b", @side_b_results.body
+      write_to directory, "side_a", side_a_body
+      write_to directory, "side_b", side_b_body
       write_to directory, "diff", diff
     end
 
     private
     def init
       return if @success = side_a_body == side_b_body
-      @message = "#{@compare_url.full_name}: #{@compare_url.url}: Body from side_a did not match body from side_b"
+      @message = "#{@compare_url.full_name}: #{@compare_url.url}: Body from #{@compare_url.base_a} did not match body from #{@compare_url.base_b}"
       @diff = Diffy::Diff.new(side_a_body, side_b_body)
+    end
+
+    def body_by_content_type(result)
+      case result.headers[:content_type]
+      when /json/i
+        h = JSON.parse result.body
+        JSON.pretty_generate h
+      else
+        body
+      end
     end
 
     def write_to(directory, ext, text)
