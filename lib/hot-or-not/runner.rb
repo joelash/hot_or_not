@@ -15,7 +15,7 @@ module HotOrNot
             print "."
             { :status => :success, :result => result }
           else
-            print "F"
+            print "N"
             { :status => :failure, :result => result }
           end
         rescue StandardError, Exception => e
@@ -39,7 +39,7 @@ module HotOrNot
 
       puts "Finsihed in %.6f seconds." % [completion_time]
       puts
-      puts "#{result_hashes.count} tests, #{counts[:failure]} failures, #{counts[:error]} errors"
+      puts "#{result_hashes.count} body comparisons, #{counts[:success]} hot bodies, #{counts[:failure]} not-hot bodies, #{counts[:error]} errored bodies"
     end
 
     def output_success result_hash
@@ -48,7 +48,7 @@ module HotOrNot
 
     def output_failure result_hash
       result_hash[:result].output_to_files_in results_dir
-      to_console "Failure:#{$/}#{result_hash[:result].message}"
+      to_console "Not Hot:#{$/}#{result_hash[:result].message}"
     end
 
     def output_error result_hash

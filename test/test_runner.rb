@@ -20,11 +20,11 @@ module HotOrNot
           assert_equal '.', test_output[1].chomp
         end
 
-        should "print 'F' for a failing test" do
+        should "print 'N' for a failing test" do
           urls = [mock_compare_url('Foo', '/api/foo', 'foo', 'bar')]
           Runner.new(urls, @output_dir).run!
 
-          assert_equal 'F', test_output[1].chomp
+          assert_equal 'N', test_output[1].chomp
         end
 
         should "print 'E' for a test that errors out" do
