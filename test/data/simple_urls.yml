@@ -1,0 +1,7 @@
+side_a: 'http://side_a'
+side_b: 'http://side_b'
+comparisons:
+  - name: People Test
+    url: /api/people
+  - name: Names Test
+    url: /api/names
