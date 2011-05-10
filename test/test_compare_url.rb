@@ -17,6 +17,20 @@ module HotOrNot
       end
     end
 
+    context "load from file with erb" do
+      setup do
+        @urls = CompareUrl.load_from File.dirname(__FILE__) + '/data/simple_urls.yml.erb'
+      end
+
+      should "load all comparisons" do
+        assert_equal 2, @urls.count
+      end
+
+      should "run erb on the file" do
+        assert_equal "People Test #{Date.today}", @urls[0].full_name
+      end
+    end
+
     context "object" do
       setup do
         @compare_url = CompareUrl.new 'Foo Url', '/api/foo', 'http://side_a', 'http://side_b'
