@@ -9,7 +9,7 @@ module HotOrNot
 
       context "500 error" do
         setup do
-          RestClient.expects(:get).with(@compare_url.side_a).returns FakeResponse.new('foo', 500)
+          RestClient.expects(:get).with(@compare_url.side_a, {}).returns FakeResponse.new('foo', 500)
         end
 
         should "raise error when response code is not 200" do
@@ -19,8 +19,8 @@ module HotOrNot
 
       context "when results match" do
         setup do
-          RestClient.expects(:get).with(@compare_url.side_a).returns FakeResponse.new 'foo'
-          RestClient.expects(:get).with(@compare_url.side_b).returns FakeResponse.new 'foo'
+          RestClient.expects(:get).with(@compare_url.side_a, {}).returns FakeResponse.new 'foo'
+          RestClient.expects(:get).with(@compare_url.side_b, {}).returns FakeResponse.new 'foo'
           @result = ComparisonResult.for @compare_url
         end
 
@@ -31,8 +31,8 @@ module HotOrNot
 
       context "when results don't match" do
         setup do
-          RestClient.expects(:get).with(@compare_url.side_a).returns FakeResponse.new 'side_a'
-          RestClient.expects(:get).with(@compare_url.side_b).returns FakeResponse.new 'side_b'
+          RestClient.expects(:get).with(@compare_url.side_a, {}).returns FakeResponse.new 'side_a'
+          RestClient.expects(:get).with(@compare_url.side_b, {}).returns FakeResponse.new 'side_b'
           @result = ComparisonResult.for @compare_url
         end
 

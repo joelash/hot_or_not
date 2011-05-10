@@ -3,12 +3,13 @@ module HotOrNot
 
     class << self
       def for(compare_url)
-        new compare_url, retreive(compare_url.side_a), retreive(compare_url.side_b)
+        headers = compare_url.headers
+        new compare_url, retreive(compare_url.side_a, headers), retreive(compare_url.side_b, headers)
       end
 
       private
-      def retreive(url)
-        RestClient.get(url).tap { |r| raise Exception.new("Invalid response code #{r.code} for '#{url}'") unless r.code.to_s == '200' }
+      def retreive(url, headers)
+        RestClient.get(url, headers).tap { |r| raise Exception.new("Invalid response code #{r.code} for '#{url}'") unless r.code.to_s == '200' }
       end
     end
 

@@ -5,3 +5,5 @@ comparisons:
     url: /api/people
   - name: Names Test
     url: /api/names
+    headers:
+      authorization: foo123bar

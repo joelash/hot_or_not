@@ -1,10 +1,11 @@
 module HotOrNot
   class CompareUrl
 
-    attr_reader :url, :base_a, :base_b
+    attr_reader :url, :base_a, :base_b, :headers
 
-    def initialize(name, url, base_a, base_b)
+    def initialize(name, url, base_a, base_b, opts={})
       @name, @url, @base_a, @base_b = name, url, base_a, base_b
+      @headers = opts['headers'] || opts[:headers] || {}
     end
 
     def full_name
@@ -27,7 +28,9 @@ module HotOrNot
       contents = YAML.load run_erb filename
       side_a, side_b = contents['side_a'], contents['side_b']
       contents['comparisons'].map do |h|
-        CompareUrl.new h['name'], h['url'], side_a, side_b
+        name = h.delete 'name'
+        url = h.delete 'url'
+        CompareUrl.new name, url, side_a, side_b, h
       end
     end
 

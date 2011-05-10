@@ -41,11 +41,12 @@ module HotOrNot
     private
     def mock_compare_url(name, url, body_a, body_b, code='200')
       CompareUrl.new(name, url, 'http://side_a', 'http://side_b').tap do |compare_url|
-        RestClient.expects(:get).with(compare_url.side_a).returns FakeResponse.new(body_a, code)
-        RestClient.expects(:get).with(compare_url.side_b).returns FakeResponse.new(body_b, code) if code.to_s == '200'
+        RestClient.expects(:get).with(compare_url.side_a, {}).returns FakeResponse.new(body_a, code)
+        RestClient.expects(:get).with(compare_url.side_b, {}).returns FakeResponse.new(body_b, code) if code.to_s == '200'
       end
     end
     
+    private
     def intercept_io
       @output_filename = 'test_runner_tests.txt'
       @output_file = File.open(@output_filename, 'w+')
@@ -55,8 +56,12 @@ module HotOrNot
 
     def reset_io
       @output_file.close
-      FileUtils.rm_f @output_filename
+      FileUtils.rm_f @output_filename if leave_last_ouput?
       STDOUT.reopen @orig_stdout
+    end
+
+    def leave_last_ouput?
+      ENV['HORN_io'].to_s.downcase != 'false'
     end
     
     def test_output

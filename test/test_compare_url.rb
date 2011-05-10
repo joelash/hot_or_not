@@ -15,6 +15,11 @@ module HotOrNot
         assert_equal 'People Test', @urls[0].full_name
         assert_equal 'Names Test', @urls[1].full_name
       end
+
+      should "load headers from file" do
+        expected_headers = { 'authorization' => 'foo123bar' }
+        assert_equal expected_headers, @urls[1].headers
+      end
     end
 
     context "load from file with erb" do
@@ -44,6 +49,22 @@ module HotOrNot
       should "create urls for the side_b release" do
         assert_equal 'http://side_a/api/foo', @compare_url.side_a
         assert_equal 'http://side_b/api/foo', @compare_url.side_b
+      end
+
+      should "default headers to empty hash" do
+        expected_headers = {}
+        assert_equal expected_headers, @compare_url.headers
+      end
+    end
+
+    context "object with options" do
+      setup do
+        @compare_url = CompareUrl.new 'Foo Url', '/api/foo', 'http://side_a', 'http://side_b', :headers => { :authorization => 'baz321' }
+      end
+
+      should "read headers form opts" do
+        expected_headers = { :authorization => 'baz321' }
+        assert_equal expected_headers, @compare_url.headers
       end
     end
   end
