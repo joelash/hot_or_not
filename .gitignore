@@ -1,6 +1,9 @@
 test_results
 *.gemspec
 
+# rvm
+.rvmrc
+
 # rcov generated
 coverage
 
