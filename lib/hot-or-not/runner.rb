@@ -1,70 +1,24 @@
 module HotOrNot
   class Runner
-    def initialize(urls, output_dir)
-      @urls, @output_dir = urls, output_dir
-      @output_count = 0
+    def initialize(urls, announcer)
+      @urls, @announcer = urls, announcer
     end
 
     def run!
-      puts "Started"
-      start = Time.now
-      results = @urls.map do |url|
+      @announcer.starting
+      @urls.each do |url|
         begin
           result = ComparisonResult.for url
           if result.success?
-            print "."
-            { :status => :success, :result => result }
+            @announcer.announce_success result
           else
-            print "N"
-            { :status => :failure, :result => result }
+            @announcer.announce_failure result
           end
         rescue StandardError, Exception => e
-          print "E"
-          { :status => :error, :url => url, :error => e }
+          @announcer.announce_error url, e
         end
       end
-
-      output results, Time.now - start
-    end
-
-    private
-    def output(result_hashes, completion_time)
-      counts = Hash.new(0)
-      puts
-      result_hashes.each do |result_hash| 
-        status = result_hash[:status]
-        send :"output_#{status}", result_hash
-        counts[status] += 1
-      end
-
-      puts "Finsihed in %.6f seconds." % [completion_time]
-      puts
-      puts "#{result_hashes.count} body comparisons, #{counts[:success]} hot bodies, #{counts[:failure]} not-hot bodies, #{counts[:error]} errored bodies"
-    end
-
-    def output_success result_hash
-      #do nothing
-    end
-
-    def output_failure result_hash
-      result_hash[:result].output_to_files_in results_dir
-      to_console "Not Hot:#{$/}#{result_hash[:result].message}"
-    end
-
-    def output_error result_hash
-      to_console "Error:#{$/}Retreiving #{result_hash[:url].url} raised error: #{result_hash[:error].message}#{$/}#{result_hash[:error].backtrace.join($/)}"
-    end
-    
-    def to_console(message)
-      @output_count += 1
-      puts "  #{@output_count}) #{message}"
-    end
-
-    def results_dir
-      @results_dir ||= @output_dir.tap do |dir| 
-        FileUtils.rm_rf dir
-        FileUtils.mkdir_p dir
-      end
+      @announcer.ending
     end
   end
 end

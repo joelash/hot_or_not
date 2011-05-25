@@ -2,71 +2,101 @@ require 'helper'
 
 module HotOrNot
   class TestRunner < Test::Unit::TestCase
-    context "run" do
+    def initialize(*args)
+      @announcer = Class.new do
+        include Announcer
+
+        attr_reader :messages
+        def initialize
+          @messages = {}
+        end
+
+        def starting
+          @messages[:starting] = true
+        end
+
+        def ending
+          @messages[:ending] = true
+        end
+
+        def announce_success(result)
+          @messages[:success] = true
+        end
+
+        def announce_failure(result)
+          @messages[:failure] = true
+        end
+
+        def announce_error(url, error)
+          @messages[:error] = true
+        end
+      end.new
+
+      super
+    end
+
+    context "successful comparison" do
       setup do
-        intercept_io
-        @output_dir = 'test_results'
+        urls = [mock_compare_url('Foo', '/api/foo', 'foo', 'foo')]
+        Runner.new(urls, @announcer).run!
       end
 
-      teardown do
-        reset_io
+      should "announce starting" do
+        assert @announcer.messages[:starting]
       end
 
-      context "the console output" do
-        should "print '.' for passing test" do
-          urls = [mock_compare_url('Foo', '/api/foo', 'foo', 'foo')]
-          Runner.new(urls, @output_dir).run!
-
-          assert_equal '.', test_output[1].chomp
-        end
-
-        should "print 'N' for a failing test" do
-          urls = [mock_compare_url('Foo', '/api/foo', 'foo', 'bar')]
-          Runner.new(urls, @output_dir).run!
-
-          assert_equal 'N', test_output[1].chomp
-        end
-
-        should "print 'E' for a test that errors out" do
-          urls = [mock_compare_url('Foo', '/api/foo', 'foo', 'bar', 404)]
-          Runner.new(urls, @output_dir).run!
-
-          o = test_output
-          assert_equal 'E', o[1].chomp
-        end
+      should "announce ending" do
+        assert @announcer.messages[:ending]
       end
 
-
-    end
-    private
-    def mock_compare_url(name, url, body_a, body_b, code='200')
-      CompareUrl.new(name, url, 'http://side_a', 'http://side_b').tap do |compare_url|
-        RestClient.expects(:get).with(compare_url.side_a, {}).returns FakeResponse.new(body_a, code)
-        RestClient.expects(:get).with(compare_url.side_b, {}).returns FakeResponse.new(body_b, code) if code.to_s == '200'
+      should "only annouce success" do
+        assert @announcer.messages[:success]
+        assert_false @announcer.messages[:failure]
+        assert_false @announcer.messages[:error]
       end
     end
-    
-    private
-    def intercept_io
-      @output_filename = 'test_runner_tests.txt'
-      @output_file = File.open(@output_filename, 'w+')
-      @orig_stdout = STDOUT.dup
-      STDOUT.reopen(@output_file)
+
+    context "failing comparison" do
+      setup do
+        urls = [mock_compare_url('Foo', '/api/foo', 'foo', 'bar')]
+        Runner.new(urls, @announcer).run!
+      end
+
+      should "announce starting" do
+        assert @announcer.messages[:starting]
+      end
+
+      should "announce ending" do
+        assert @announcer.messages[:ending]
+      end
+
+      should "only annouce failure" do
+        assert @announcer.messages[:failure]
+        assert_false @announcer.messages[:success]
+        assert_false @announcer.messages[:error]
+      end
     end
 
-    def reset_io
-      @output_file.close
-      FileUtils.rm_f @output_filename if leave_last_ouput?
-      STDOUT.reopen @orig_stdout
+    context "error during comparison" do
+      setup do
+        urls = [mock_compare_url('Foo', '/api/foo', 'foo', 'bar', 404)]
+        Runner.new(urls, @announcer).run!
+      end
+
+      should "announce starting" do
+        assert @announcer.messages[:starting]
+      end
+
+      should "announce ending" do
+        assert @announcer.messages[:ending]
+      end
+
+      should "only annouce error" do
+        assert @announcer.messages[:error]
+        assert_false @announcer.messages[:success]
+        assert_false @announcer.messages[:failure]
+      end
     end
 
-    def leave_last_ouput?
-      ENV['HORN_io'].to_s.downcase != 'false'
-    end
-    
-    def test_output
-      STDOUT.flush
-      File.readlines(@output_file)
-    end
   end
 end
