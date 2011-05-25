@@ -5,6 +5,7 @@ module HotOrNot
     def initialize(output_dir)
       @output_dir = output_dir
       @start, @results = nil, []
+      @output_count = 0
     end
 
     def starting
@@ -13,6 +14,18 @@ module HotOrNot
     end
 
     def ending
+      completion_time = Time.now - @start
+      counts = Hash.new(0)
+      puts
+      @results.each do |result_hash| 
+        status = result_hash[:status]
+        send :"output_#{status}", result_hash
+        counts[status] += 1
+      end
+
+      puts "Finsihed in %.6f seconds." % [completion_time]
+      puts
+      puts "#{@results.count} body comparisons, #{counts[:success]} hot bodies, #{counts[:failure]} not-hot bodies, #{counts[:error]} errored bodies"
     end
 
     def announce_success(result)
@@ -31,20 +44,6 @@ module HotOrNot
     end
 
     private
-    def output(result_hashes, completion_time)
-      counts = Hash.new(0)
-      puts
-      result_hashes.each do |result_hash| 
-        status = result_hash[:status]
-        send :"output_#{status}", result_hash
-        counts[status] += 1
-      end
-
-      puts "Finsihed in %.6f seconds." % [completion_time]
-      puts
-      puts "#{result_hashes.count} body comparisons, #{counts[:success]} hot bodies, #{counts[:failure]} not-hot bodies, #{counts[:error]} errored bodies"
-    end
-
     def output_success result_hash
       #do nothing
     end
