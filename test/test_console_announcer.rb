@@ -25,7 +25,9 @@ module HotOrNot
           urls = [mock_compare_url('Foo', '/api/foo', 'foo', 'bar')]
           Runner.new(urls, @announcer).run!
 
-          assert_equal 'N', test_output[1].chomp
+          output = test_output
+          assert_equal 'N', output[1].chomp
+          assert_equal '  1) Not Hot:', output[2].chomp
         end
 
         should "print 'E' for a test that errors out" do

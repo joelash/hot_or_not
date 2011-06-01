@@ -1,5 +1,9 @@
 module HotOrNot
   class Runner
+    def self.run_from(file, announcer)
+      new CompareUrl.load_from(file), announcer
+    end
+
     def initialize(urls, announcer)
       @urls, @announcer = urls, announcer
     end

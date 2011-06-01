@@ -43,6 +43,5 @@ unless File.exists? yaml_file
   exit
 end
 
-urls = HotOrNot::CompareUrl.load_from yaml_file
 announcer = HotOrNot::ConsoleAnnouncer.new options[:output_directory]
-HotOrNot::Runner.new(urls, announcer).run!
+HotOrNot::Runner.run_from(yaml_file, announcer).run!

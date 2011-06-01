@@ -17,7 +17,7 @@ module HotOrNot
       completion_time = Time.now - @start
       counts = Hash.new(0)
       puts
-      @results.each do |result_hash| 
+      @results.each do |result_hash|
         status = result_hash[:status]
         send :"output_#{status}", result_hash
         counts[status] += 1
