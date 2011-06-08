@@ -15,7 +15,7 @@ require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "hot_or_not"
-  gem.homepage = "https://github.com/joelash/hot-or-not"
+  gem.homepage = "https://github.com/joelash/hot_or_not"
   gem.license = "MIT"
   gem.summary = %Q{A tool for side-by-side comparsion of web apis}
   gem.description = %Q{Run this with a new version of your site comparing to current version to verify no break changes are made to your api's}

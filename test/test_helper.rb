@@ -13,7 +13,7 @@ require 'mocha'
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
-require 'hot-or-not'
+require 'hot_or_not'
 
 module HotOrNot
   class FakeResponse

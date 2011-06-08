@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'rubygems'
-require File.dirname(__FILE__) + '/../lib/hot-or-not'
+require File.dirname(__FILE__) + '/../lib/hot_or_not'
 require 'optparse'
 
 defaults = {
@@ -10,7 +10,7 @@ defaults = {
 
 options = {}
 parser = ::OptionParser.new do |opts|
-  opts.banner = "Usage: hot-or-not [options] URL_FILE"
+  opts.banner = "Usage: hot_or_not [options] URL_FILE"
   opts.on("-o", "--output-dir", "Ouput directory. DEFAULT: #{defaults[:output_directory]}") do |d|
     options[:output_directory] = d
   end 
@@ -39,7 +39,7 @@ options = defaults.merge options
 
 yaml_file = ARGV[0]
 unless File.exists? yaml_file
-  puts "hot-or-not: no such file - #{yaml_file}"
+  puts "hot_or_not: no such file - #{yaml_file}"
   exit
 end
 
