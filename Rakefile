@@ -14,14 +14,14 @@ require 'rake'
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.name = "hot-or-not"
+  gem.name = "hot_or_not"
   gem.homepage = "https://github.com/joelash/hot-or-not"
   gem.license = "MIT"
   gem.summary = %Q{A tool for side-by-side comparsion of web apis}
   gem.description = %Q{Run this with a new version of your site comparing to current version to verify no break changes are made to your api's}
   gem.email = "asher.friedman@gmail.com"
   gem.authors = ["Joel Friedman"]
-  gem.executables = ['hot-or-not']
+  gem.executables = ['hot_or_not']
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new
@@ -48,7 +48,7 @@ Rake::RDocTask.new do |rdoc|
   version = File.exist?('VERSION') ? File.read('VERSION') : ""
 
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "hot-or-not #{version}"
+  rdoc.title = "hot_or_not #{version}"
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
