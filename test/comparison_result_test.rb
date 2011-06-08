@@ -1,7 +1,7 @@
-require File.dirname(__FILE__) + '/helper'
+require File.dirname(__FILE__) + '/test_helper'
 
 module HotOrNot
-  class TestComparisonResult < Test::Unit::TestCase
+  class ComparisonResultTest < Test::Unit::TestCase
     context "comparing results" do
       setup do
         @compare_url = CompareUrl.new 'Test People', '/api/people', 'http://side_a', 'http://side_b'

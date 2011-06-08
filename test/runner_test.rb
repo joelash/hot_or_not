@@ -1,7 +1,7 @@
-require File.dirname(__FILE__) + '/helper'
+require File.dirname(__FILE__) + '/test_helper'
 
 module HotOrNot
-  class TestRunner < Test::Unit::TestCase
+  class RunnerTest < Test::Unit::TestCase
     def initialize(*args)
       @announcer = Class.new do
         include Announcer

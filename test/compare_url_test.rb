@@ -1,7 +1,7 @@
-require File.dirname(__FILE__) + '/helper'
+require File.dirname(__FILE__) + '/test_helper'
 
 module HotOrNot
-  class TestCompareUrl < Test::Unit::TestCase
+  class CompareUrlTest < Test::Unit::TestCase
     context "load from file" do
       setup do
         @urls = CompareUrl.load_from File.dirname(__FILE__) + '/data/simple_urls.yml'

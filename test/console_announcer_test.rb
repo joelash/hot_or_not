@@ -1,7 +1,7 @@
-require File.dirname(__FILE__) + '/helper'
+require File.dirname(__FILE__) + '/test_helper'
 
 module HotOrNot
-  class TestConsoleAnnouncer < Test::Unit::TestCase
+  class ConsoleAnnouncerTest < Test::Unit::TestCase
     context "run" do
       setup do
         intercept_io
