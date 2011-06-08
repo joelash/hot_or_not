@@ -39,8 +39,8 @@ class Test::Unit::TestCase
   private
   def mock_compare_url(name, url, body_a, body_b, code='200')
     HotOrNot::CompareUrl.new(name, url, 'http://side_a', 'http://side_b').tap do |compare_url|
-      RestClient.expects(:get).with(compare_url.side_a, {}).returns HotOrNot::FakeResponse.new(body_a, code)
-      RestClient.expects(:get).with(compare_url.side_b, {}).returns HotOrNot::FakeResponse.new(body_b, code) if code.to_s == '200'
+      RestClient::Request.expects(:execute).with(:method => :get, :url => compare_url.side_a).returns HotOrNot::FakeResponse.new(body_a, code)
+      RestClient::Request.expects(:execute).with(:method => :get, :url => compare_url.side_b).returns HotOrNot::FakeResponse.new(body_b, code) if code.to_s == '200'
     end
   end
 end

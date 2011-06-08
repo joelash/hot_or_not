@@ -1,4 +1,4 @@
-require 'helper'
+require File.dirname(__FILE__) + '/helper'
 
 module HotOrNot
   class TestCompareUrl < Test::Unit::TestCase
@@ -16,9 +16,9 @@ module HotOrNot
         assert_equal 'Names Test', @urls[1].full_name
       end
 
-      should "load headers from file" do
-        expected_headers = { 'authorization' => 'foo123bar' }
-        assert_equal expected_headers, @urls[1].headers
+      should "load options from file" do
+        expected_options = { :headers => { 'authorization' => 'foo123bar' } }
+        assert_equal expected_options, @urls[1].options
       end
     end
 
@@ -51,20 +51,20 @@ module HotOrNot
         assert_equal 'http://side_b/api/foo', @compare_url.side_b
       end
 
-      should "default headers to empty hash" do
-        expected_headers = {}
-        assert_equal expected_headers, @compare_url.headers
+      should "default options to empty hash" do
+        expected_options = {}
+        assert_equal expected_options, @compare_url.options
       end
     end
 
     context "object with options" do
       setup do
-        @compare_url = CompareUrl.new 'Foo Url', '/api/foo', 'http://side_a', 'http://side_b', :headers => { :authorization => 'baz321' }
+        @compare_url = CompareUrl.new 'Foo Url', '/api/foo', 'http://side_a', 'http://side_b', :headers => { 'authorization' => 'baz321' }
       end
 
-      should "read headers form opts" do
-        expected_headers = { :authorization => 'baz321' }
-        assert_equal expected_headers, @compare_url.headers
+      should "read provid options as passed in" do
+        expected_options = { :headers => { 'authorization' => 'baz321' } }
+        assert_equal expected_options, @compare_url.options
       end
     end
   end
