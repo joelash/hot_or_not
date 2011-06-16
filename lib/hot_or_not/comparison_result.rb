@@ -1,17 +1,11 @@
 module HotOrNot
   class ComparisonResult
 
-    DEFAULT_OPTIONS = { :method => :get }
     class << self
       def for(compare_url)
-        options = DEFAULT_OPTIONS.merge compare_url.options
-        new compare_url, retreive(compare_url.side_a, options), retreive(compare_url.side_b, options)
-      end
-
-      private
-      def retreive(url, options)
-        options[:url] = url
-        RestClient::Request.execute(options).tap { |r| raise Exception.new("Invalid response code #{r.code} for '#{url}'") unless r.code.to_s == '200' }
+        side_a_result = UrlResult.retrieve_for compare_url.side_a, compare_url.options
+        side_b_result = UrlResult.retrieve_for compare_url.side_b, compare_url.options
+        new compare_url, side_a_result, side_b_result
       end
     end
 
@@ -20,11 +14,17 @@ module HotOrNot
     def initialize(compare_url, side_a_results, side_b_results)
       @compare_url, @side_a_results, @side_b_results = compare_url, side_a_results, side_b_results
       @message, @diff = '', ''
-      init
+      init_message unless success?
     end
 
     def success?
-      @success
+      !error? &&
+        @side_a_results.code == @side_b_results.code &&
+        side_a_body == side_b_body
+    end
+
+    def error?
+      @side_a_results.error? || @side_b_results.error?
     end
 
     def side_a_body
@@ -46,10 +46,16 @@ module HotOrNot
     end
 
     private
-    def init
-      return if @success = side_a_body == side_b_body
-      @message = "#{@compare_url.full_name}: #{@compare_url.url}: Body from #{@compare_url.base_a} did not match body from #{@compare_url.base_b}"
-      @diff = Diffy::Diff.new(side_a_body, side_b_body)
+    def init_message
+      @message = if error?
+                   message = "#{@compare_url.full_name}: #{@compare_url.url}: Error retrieving body"
+                   message += "#{$/}  #{@compare_url.base_a} => #{@side_a_results.error_message}" if @side_a_results.error?
+                   message += "#{$/}  #{@compare_url.base_b} => #{@side_b_results.error_message}" if @side_b_results.error?
+                   message
+                 else
+                   @diff = Diffy::Diff.new(side_a_body, side_b_body)
+                   "#{@compare_url.full_name}: #{@compare_url.url}: Body from #{@compare_url.base_a} did not match body from #{@compare_url.base_b}"
+                 end
     end
 
     def body_by_content_type(result)

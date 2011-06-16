@@ -37,10 +37,24 @@ class Test::Unit::TestCase
   end
 
   private
-  def mock_compare_url(name, url, body_a, body_b, code='200')
+  def mock_compare_url(name, url, body_a, body_b, code_a=200, code_b=200)
     HotOrNot::CompareUrl.new(name, url, 'http://side_a', 'http://side_b').tap do |compare_url|
-      RestClient::Request.expects(:execute).with(:method => :get, :url => compare_url.side_a).returns HotOrNot::FakeResponse.new(body_a, code)
-      RestClient::Request.expects(:execute).with(:method => :get, :url => compare_url.side_b).returns HotOrNot::FakeResponse.new(body_b, code) if code.to_s == '200'
+      response_a, error_a = response_and_error_for body_a, code_a
+      response_b, error_b = response_and_error_for body_b, code_b
+      side_a_result = HotOrNot::UrlResult.new compare_url.side_a, response_a, error_a
+      side_b_result = HotOrNot::UrlResult.new compare_url.side_b, response_b, error_b
+      HotOrNot::ComparisonResult.expects(:for).with(compare_url).returns HotOrNot::ComparisonResult.new(compare_url, side_a_result, side_b_result)
     end
+  end
+
+  def response_and_error_for(body, code)
+    response, error = nil, nil
+    code = code.to_i
+    if code == 200
+      response = HotOrNot::FakeResponse.new body
+    else
+      error = RestClient::Exceptions::EXCEPTIONS_MAP[code].new
+    end
+    [response, error]
   end
 end

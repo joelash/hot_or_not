@@ -6,7 +6,7 @@ module HotOrNot
     def announce_failure(result)
     end
 
-    def announce_error(url, error)
+    def announce_error(result)
     end
 
     def starting

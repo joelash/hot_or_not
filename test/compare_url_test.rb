@@ -62,7 +62,7 @@ module HotOrNot
         @compare_url = CompareUrl.new 'Foo Url', '/api/foo', 'http://side_a', 'http://side_b', :headers => { 'authorization' => 'baz321' }
       end
 
-      should "read provid options as passed in" do
+      should "read provided options as passed in" do
         expected_options = { :headers => { 'authorization' => 'baz321' } }
         assert_equal expected_options, @compare_url.options
       end

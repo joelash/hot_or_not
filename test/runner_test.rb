@@ -27,7 +27,7 @@ module HotOrNot
           @messages[:failure] = true
         end
 
-        def announce_error(url, error)
+        def announce_error(result)
           @messages[:error] = true
         end
       end.new
@@ -77,7 +77,7 @@ module HotOrNot
       end
     end
 
-    context "error during comparison" do
+    context "error during retreival" do
       setup do
         urls = [mock_compare_url('Foo', '/api/foo', 'foo', 'bar', 404)]
         Runner.new(urls, @announcer).run!

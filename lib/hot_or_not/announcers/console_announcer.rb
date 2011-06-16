@@ -38,8 +38,8 @@ module HotOrNot
       print "N"
     end
 
-    def announce_error(url, error)
-      @results << { :status => :error, :url => url, :error => error }
+    def announce_error(result)
+      @results << { :status => :error, :result => result }
       print "E"
     end
 
@@ -54,7 +54,7 @@ module HotOrNot
     end
 
     def output_error result_hash
-      to_console "Error:#{$/}Retreiving #{result_hash[:url].url} raised error: #{result_hash[:error].message}#{$/}#{result_hash[:error].backtrace.join($/)}"
+      to_console "Error:#{$/}#{result_hash[:result].message}"
     end
     
     def to_console(message)
