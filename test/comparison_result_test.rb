@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/test_helper'
+require File.expand_path(File.dirname(__FILE__)) + '/test_helper'
 
 module HotOrNot
   class ComparisonResultTest < Test::Unit::TestCase
@@ -22,15 +22,33 @@ module HotOrNot
       context "comparing results" do
 
         context "when results match" do
-          setup do
-            response = FakeResponse.new 'foo'
-            side_a_results = UrlResult.new @compare_url.side_a, response, nil
-            side_b_results = UrlResult.new @compare_url.side_b, response, nil
-            @result = ComparisonResult.new @compare_url, side_a_results, side_b_results
+          context "and are strings" do
+            setup do
+              response = FakeResponse.new 'foo'
+              side_a_results = UrlResult.new @compare_url.side_a, response, nil
+              side_b_results = UrlResult.new @compare_url.side_b, response, nil
+              @result = ComparisonResult.new @compare_url, side_a_results, side_b_results
+            end
+
+            should "return success" do
+              assert @result.success?
+            end
           end
 
-          should "return success" do
-            assert @result.success?
+          context "and are json" do
+            setup do
+              hash1 = {'a'=>1,'b'=>2}
+              hash2 = {'a'=>3,'b'=>4}
+              response_a = FakeResponse.new [hash1, hash2].to_json, 200, :content_type => 'application/json'
+              response_b = FakeResponse.new [hash2, hash1].to_json, 200, :content_type => 'application/json'
+              side_a_results = UrlResult.new @compare_url.side_a, response_a, nil
+              side_b_results = UrlResult.new @compare_url.side_b, response_b, nil
+              @result = ComparisonResult.new @compare_url, side_a_results, side_b_results
+            end
+
+            should "return success" do
+              assert @result.success?
+            end
           end
         end
 

@@ -61,8 +61,9 @@ module HotOrNot
     def body_by_content_type(result)
       case result.headers[:content_type]
       when /json/i
-        h = JSON.parse result.body
-        JSON.pretty_generate h
+        json = JSON.parse result.body
+        json.sort!
+        JSON.pretty_generate json
       else
         result.body
       end

@@ -26,7 +26,7 @@ module HotOrNot
 end
 
 class Test::Unit::TestCase
-  def assert_false(truth, message=nil)
+  def assert_false(truth, message='')
     assert !truth, message
   end
   alias_method :assert_not, :assert_false
