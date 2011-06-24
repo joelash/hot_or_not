@@ -16,3 +16,4 @@ end
 gem 'rest-client', '~> 1.6.1'
 gem 'diffy', '~> 2.0.1'
 gem 'facets', '~> 2.9.1'
+gem 'json', '~> 1.5.2'
