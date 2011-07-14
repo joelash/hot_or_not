@@ -50,6 +50,23 @@ module HotOrNot
               assert @result.success?
             end
           end
+
+          context "inside of a selector" do
+            setup do
+              compare_url = CompareUrl.new 'Test People', '/api/people', 'http://side_a', 'http://side_b', :selector => 'div#content'
+              body_a = "<div>foo</div><div id='content'>foo</div>"
+              body_b = "<div>bar</div><div id='content'>foo</div>"
+              response_a = FakeResponse.new body_a, 200
+              response_b = FakeResponse.new body_b, 200
+              side_a_results = UrlResult.new compare_url.side_a, response_a, nil
+              side_b_results = UrlResult.new compare_url.side_b, response_b, nil
+              @result = ComparisonResult.new compare_url, side_a_results, side_b_results
+            end
+
+            should "return success" do
+              assert @result.success?
+            end
+          end
         end
 
         context "when results don't match" do
