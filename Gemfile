@@ -14,7 +14,7 @@ group :development do
 end
 
 gem 'rest-client', '~> 1.6.1'
-gem 'diffy', '~> 2.0.1'
+gem 'diffy', '~> 2.0.1', :git => 'git://github.com/joelash/diffy.git'
 gem 'facets', '~> 2.9.1'
 gem 'json', '~> 1.5.2'
 gem 'hpricot', '~> 0.8.4'

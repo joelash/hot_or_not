@@ -41,7 +41,7 @@ module HotOrNot
 
     def different?
       return side_a_body != side_b_body if @diff.nil?
-      @diff.count > side_a_body.lines.count || @diff.count > side_b_body.lines.count
+      @diff.diff != side_a_body.gsub(/^/, ' ')
     end
 
     def output_to_files_in(directory)
@@ -58,8 +58,8 @@ module HotOrNot
                    message += "#{$/}  #{@compare_url.base_b} => #{@side_b_results.error_message}" if @side_b_results.error?
                    message
                  else
-                   diff_options = '-U 3'
-                   diff_options += ' ' + @compare_url.options[:diff] if @compare_url.options[:diff]
+                   diff_options = ['-U 3']
+                   diff_options << @compare_url.options[:diff] if @compare_url.options[:diff]
                    @diff = Diffy::Diff.new(side_a_body, side_b_body, :diff => diff_options)
                    "#{@compare_url.full_name}: #{@compare_url.url}: Body from #{@compare_url.base_a} did not match body from #{@compare_url.base_b}"
                  end
