@@ -13,14 +13,14 @@ module HotOrNot
 
     def initialize(compare_url, side_a_results, side_b_results)
       @compare_url, @side_a_results, @side_b_results = compare_url, side_a_results, side_b_results
-      @message, @diff = '', ''
+      @message = ''
       init_message unless success?
     end
 
     def success?
       !error? &&
         @side_a_results.code == @side_b_results.code &&
-        side_a_body == side_b_body
+        !different?
     end
 
     def error?
@@ -39,6 +39,11 @@ module HotOrNot
       @diff.to_s format
     end
 
+    def different?
+      return side_a_body != side_b_body if @diff.nil?
+      @diff.count > 1
+    end
+
     def output_to_files_in(directory)
       write_to directory, "side_a", side_a_body
       write_to directory, "side_b", side_b_body
@@ -53,7 +58,9 @@ module HotOrNot
                    message += "#{$/}  #{@compare_url.base_b} => #{@side_b_results.error_message}" if @side_b_results.error?
                    message
                  else
-                   @diff = Diffy::Diff.new(side_a_body, side_b_body, :diff => '-U 3')
+                   diff_options = '-U 3'
+                   diff_options += ' ' + @compare_url.options[:diff] if @compare_url.options[:diff]
+                   @diff = Diffy::Diff.new(side_a_body, side_b_body, :diff => diff_options)
                    "#{@compare_url.full_name}: #{@compare_url.url}: Body from #{@compare_url.base_a} did not match body from #{@compare_url.base_b}"
                  end
     end
