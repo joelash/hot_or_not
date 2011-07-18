@@ -59,7 +59,8 @@ module HotOrNot
                    message
                  else
                    diff_options = ['-U 3']
-                   diff_options << @compare_url.options[:diff] if @compare_url.options[:diff]
+                   diff_options += Array(@compare_url.options[:diff]) if @compare_url.options[:diff]
+
                    @diff = Diffy::Diff.new(side_a_body, side_b_body, :diff => diff_options)
                    "#{@compare_url.full_name}: #{@compare_url.url}: Body from #{@compare_url.base_a} did not match body from #{@compare_url.base_b}"
                  end
