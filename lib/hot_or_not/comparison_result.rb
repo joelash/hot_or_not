@@ -41,7 +41,7 @@ module HotOrNot
 
     def different?
       return side_a_body != side_b_body if @diff.nil?
-      @diff.count > 1
+      @diff.count > side_a_body.lines.count || @diff.count > side_b_body.lines.count
     end
 
     def output_to_files_in(directory)

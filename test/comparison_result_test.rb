@@ -71,8 +71,8 @@ module HotOrNot
           context "ignoring whitespace" do
             setup do
               compare_url = CompareUrl.new 'Test People', '/api/people', 'http://side_a', 'http://side_b', :diff => '-w'
-              body_a = "foo"
-              body_b = " foo"
+              body_a = "foo\nbar"
+              body_b = " foo\nbar"
               response_a = FakeResponse.new body_a, 200
               response_b = FakeResponse.new body_b, 200
               side_a_results = UrlResult.new compare_url.side_a, response_a, nil
