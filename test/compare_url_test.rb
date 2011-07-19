@@ -17,7 +17,12 @@ module HotOrNot
       end
 
       should "load options from file" do
-        expected_options = { :headers => { 'authorization' => 'foo123bar' } }
+        expected_headers = { 'authorization' => 'foo123bar' }
+        assert_equal expected_headers, @urls[1].options[:headers]
+      end
+
+      should "merge global options in" do
+        expected_options = { :diff => '-w', :headers => { 'authorization' => 'foo123bar' } }
         assert_equal expected_options, @urls[1].options
       end
     end
