@@ -8,9 +8,11 @@ module HotOrNot
       @urls, @announcer = urls, announcer
     end
 
-    def run!
+    def run!(to_run = :all)
+      @to_run = to_run
       @announcer.starting
       @urls.each do |url|
+        next unless should_run? url
         result = ComparisonResult.for url
         if result.success?
           @announcer.announce_success result
@@ -21,6 +23,14 @@ module HotOrNot
         end
       end
       @announcer.ending
+    end
+
+    private
+    def should_run?(url)
+      return true if @to_run == :all
+      Array(@to_run).any? do |to_run|
+        url.full_name == to_run || url.short_name == to_run
+      end
     end
   end
 end

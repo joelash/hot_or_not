@@ -1,5 +1,6 @@
 module HotOrNot
   class ComparisonResult
+    extend Forwardable
 
     class << self
       def for(compare_url)
@@ -10,6 +11,7 @@ module HotOrNot
     end
 
     attr_reader :message
+    def_delegators :@compare_url, :short_name
 
     def initialize(compare_url, side_a_results, side_b_results)
       @compare_url, @side_a_results, @side_b_results = compare_url, side_a_results, side_b_results

@@ -5,15 +5,20 @@ require File.dirname(__FILE__) + '/../lib/hot_or_not'
 require 'optparse'
 
 defaults = {
-  :output_directory => 'test_results'
+  :output_directory => 'test_results',
+  :test_names       => :all
 }
 
 options = {}
 parser = ::OptionParser.new do |opts|
   opts.banner = "Usage: hot_or_not [options] URL_FILE"
-  opts.on("-o", "--output-dir", "Ouput directory. DEFAULT: #{defaults[:output_directory]}") do |d|
+  opts.on("-o", "--output-dir [DIRECTORY]", "Ouput base directory. DEFAULT: #{defaults[:output_directory]}") do |d|
     options[:output_directory] = d
   end 
+
+  opts.on('-n', '--name [NAMES]', "Test names to run. DEFAULT: all") do |test_names|
+    options[:test_names] = test_names.split(',')
+  end
 
   opts.on_tail("--example-file", "Output contents of example file") do
     puts
@@ -43,5 +48,8 @@ unless File.exists? yaml_file
   exit
 end
 
-announcer = HotOrNot::ConsoleAnnouncer.new options[:output_directory]
-HotOrNot::Runner.run_from(yaml_file, announcer).run!
+suite_name = File.basename(yaml_file).gsub('.yml', '').gsub('.erb', '')
+output_dir = File.join options[:output_directory], suite_name
+
+announcer = HotOrNot::ConsoleAnnouncer.new output_dir
+HotOrNot::Runner.run_from(yaml_file, announcer).run! options[:test_names]

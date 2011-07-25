@@ -1,5 +1,6 @@
 side_a: 'http://side_a'
 side_b: 'http://side_b'
+diff: -w
 comparisons:
   - name: People Test
     url: /api/people
