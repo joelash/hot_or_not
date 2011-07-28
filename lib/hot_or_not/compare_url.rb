@@ -27,7 +27,7 @@ module HotOrNot
     def self.load_from(filename)
       contents = YAML.load(run_erb(filename)).symbolize_keys!
       side_a, side_b, comparisons = contents.delete(:side_a), contents.delete(:side_b), contents.delete(:comparisons)
-      raise "You're file is not of the proper format" unless side_a && side_b && comparisons
+      raise "Your file is not in the proper format" unless side_a && side_b && comparisons
       comparisons.map do |h|
         h.symbolize_keys!
         name = h.delete :name

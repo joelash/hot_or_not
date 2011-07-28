@@ -23,7 +23,7 @@ module HotOrNot
         counts[status] += 1
       end
 
-      puts "Finsihed in %.6f seconds." % [completion_time]
+      puts "Finished in %.6f seconds." % [completion_time]
       puts
       puts "#{@results.count} body comparisons, #{counts[:success]} hot bodies, #{counts[:failure]} not-hot bodies, #{counts[:error]} errored bodies"
     end
