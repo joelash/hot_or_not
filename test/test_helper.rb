@@ -58,3 +58,32 @@ class Test::Unit::TestCase
     [response, error]
   end
 end
+
+module HotOrNot
+  class AnnouncerTestCase < Test::Unit::TestCase
+    private
+    def intercept_io
+      @output_filename = 'test_runner_tests.txt'
+      @output_file = File.open(@output_filename, 'w+')
+      @orig_stdout = STDOUT.dup
+      STDOUT.reopen(@output_file)
+    end
+
+    def reset_io
+      @output_file.close
+      @test_output = nil
+      FileUtils.rm_f @output_filename if leave_last_ouput?
+      STDOUT.reopen @orig_stdout
+    end
+
+    def leave_last_ouput?
+      ENV['HORN_io'].to_s.downcase != 'false'
+    end
+    
+    def test_output
+      @test_output ||= (
+        STDOUT.flush
+        File.readlines(@output_file) )
+    end
+  end
+end

@@ -11,7 +11,7 @@ module HotOrNot
     end
 
     attr_reader :message
-    def_delegators :@compare_url, :short_name
+    def_delegators :@compare_url, :short_name, :full_name
 
     def initialize(compare_url, side_a_results, side_b_results)
       @compare_url, @side_a_results, @side_b_results = compare_url, side_a_results, side_b_results
@@ -47,9 +47,14 @@ module HotOrNot
     end
 
     def output_to_files_in(directory)
-      write_to directory, "side_a", side_a_body
-      write_to directory, "side_b", side_b_body
-      write_to directory, "diff", diff
+      return if success?
+      if error?
+        write_to directory, "error", message
+      else
+        write_to directory, "side_a", side_a_body
+        write_to directory, "side_b", side_b_body
+        write_to directory, "diff", diff
+      end
     end
 
     private

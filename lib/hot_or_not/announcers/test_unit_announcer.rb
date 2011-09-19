@@ -1,5 +1,5 @@
 module HotOrNot
-  class ConsoleAnnouncer
+  class TestUnitAnnouncer
     include Announcer
 
     def initialize(output_dir)

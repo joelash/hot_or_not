@@ -4,9 +4,33 @@ require 'rubygems'
 require File.dirname(__FILE__) + '/../lib/hot_or_not'
 require 'optparse'
 
+def constantize(camel_cased_word)
+  names = camel_cased_word.split('::')
+  names.shift if names.empty? || names.first.empty?
+
+  constant = Object
+  names.each do |name|
+    constant = constant.const_defined?(name) ? constant.const_get(name) : constant.const_missing(name)
+  end
+  constant
+end
+
+def get_announcer(announcer)
+  klass = constantize(announcer) rescue nil
+  return klass unless klass.nil?
+  begin
+    constantize("HotOrNot::#{announcer}Announcer")
+  rescue NameError
+    puts "Announcer #{announcer} cannot be found"
+    exit 1
+  end
+end
+
 defaults = {
   :output_directory => 'test_results',
-  :test_names       => :all
+  :test_names       => :all,
+  :announcer        => 'TestUnit',
+  :requires         => []
 }
 
 options = {}
@@ -15,6 +39,15 @@ parser = ::OptionParser.new do |opts|
   opts.on("-o", "--output-dir [DIRECTORY]", "Ouput base directory. DEFAULT: #{defaults[:output_directory]}") do |d|
     options[:output_directory] = d
   end 
+
+  opts.on("--announcer [ANNOUNCER]", "Announcer to use for output results (full constant if not in HotOrNot). DEFAULT: #{defaults[:announcer]}") do |a|
+    options[:announcer] = a
+  end
+
+  opts.on("-r", "--require [FILE]", "Require an additional file.") do |file|
+    options[:requires] ||= []
+    options[:requires] << file
+  end
 
   opts.on('-n', '--name [NAMES]', "Test names to run. DEFAULT: all") do |test_names|
     options[:test_names] = test_names.split(',')
@@ -51,5 +84,7 @@ end
 suite_name = File.basename(yaml_file).gsub('.yml', '').gsub('.erb', '')
 output_dir = File.join options[:output_directory], suite_name
 
-announcer = HotOrNot::ConsoleAnnouncer.new output_dir
+options[:requires].each { |file| require file }
+
+announcer = get_announcer(options[:announcer]).new output_dir
 HotOrNot::Runner.run_from(yaml_file, announcer).run! options[:test_names]
