@@ -61,6 +61,9 @@ end
 
 module HotOrNot
   class AnnouncerTestCase < Test::Unit::TestCase
+    def default_test
+    end
+
     private
     def intercept_io
       @output_filename = 'test_runner_tests.txt'
@@ -83,7 +86,7 @@ module HotOrNot
     def test_output
       @test_output ||= (
         STDOUT.flush
-        File.readlines(@output_file) )
+        File.readlines(@output_filename) )
     end
   end
 end
