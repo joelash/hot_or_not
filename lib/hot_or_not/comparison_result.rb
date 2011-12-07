@@ -19,6 +19,14 @@ module HotOrNot
       init_message unless success?
     end
 
+    def side_a_latency
+      @side_a_results.latency
+    end
+
+    def side_b_latency
+      @side_b_results.latency
+    end
+
     def success?
       !error? &&
         @side_a_results.code == @side_b_results.code &&
