@@ -18,7 +18,7 @@ module HotOrNot
           urls = [mock_compare_url('Passing Test', '/api/foo', 'foo', 'foo')]
           Runner.new(urls, @announcer).run!
 
-          expected_output = /^Hot:\s+Passing Test$/
+          expected_output = /^Hot:\s+Passing Test\s+1.0000s, 1.0000s$/
           assert_match expected_output, test_output[1].chomp
         end
 
@@ -26,7 +26,7 @@ module HotOrNot
           urls = [mock_compare_url('Failing Test', '/api/foo', 'foo', 'bar')]
           Runner.new(urls, @announcer).run!
 
-          expected_output = /^Not Hot:\s+Failing Test$/
+          expected_output = /^Not Hot:\s+Failing Test\s+1.0000s, 1.0000s$/
           assert_match expected_output, test_output[1].chomp
         end
 
@@ -34,7 +34,7 @@ module HotOrNot
           urls = [mock_compare_url('Error test', '/api/foo', 'foo', 'bar', 404)]
           Runner.new(urls, @announcer).run!
 
-          assert_match /^Error:\s+Error test$/, test_output[1].chomp
+          assert_match /^Error:\s+Error test\s+1.0000s, 1.0000s$/, test_output[1].chomp
         end
       end
     end

@@ -25,8 +25,8 @@ module HotOrNot
           context "and are strings" do
             setup do
               response = FakeResponse.new 'foo'
-              side_a_results = UrlResult.new @compare_url.side_a, response, nil
-              side_b_results = UrlResult.new @compare_url.side_b, response, nil
+              side_a_results = UrlResult.new @compare_url.side_a, response, nil, 1
+              side_b_results = UrlResult.new @compare_url.side_b, response, nil, 1
               @result = ComparisonResult.new @compare_url, side_a_results, side_b_results
             end
 
@@ -41,8 +41,8 @@ module HotOrNot
               hash2 = {'a'=>3,'b'=>4}
               response_a = FakeResponse.new [hash1, hash2].to_json, 200, :content_type => 'application/json'
               response_b = FakeResponse.new [hash2, hash1].to_json, 200, :content_type => 'application/json'
-              side_a_results = UrlResult.new @compare_url.side_a, response_a, nil
-              side_b_results = UrlResult.new @compare_url.side_b, response_b, nil
+              side_a_results = UrlResult.new @compare_url.side_a, response_a, nil, 1
+              side_b_results = UrlResult.new @compare_url.side_b, response_b, nil, 1
               @result = ComparisonResult.new @compare_url, side_a_results, side_b_results
             end
 
@@ -58,8 +58,8 @@ module HotOrNot
               body_b = "<div>bar</div><div id='content'>foo</div>"
               response_a = FakeResponse.new body_a, 200
               response_b = FakeResponse.new body_b, 200
-              side_a_results = UrlResult.new compare_url.side_a, response_a, nil
-              side_b_results = UrlResult.new compare_url.side_b, response_b, nil
+              side_a_results = UrlResult.new compare_url.side_a, response_a, nil, 1
+              side_b_results = UrlResult.new compare_url.side_b, response_b, nil, 1
               @result = ComparisonResult.new compare_url, side_a_results, side_b_results
             end
 
@@ -75,8 +75,8 @@ module HotOrNot
               body_b = " foo\nbar"
               response_a = FakeResponse.new body_a, 200
               response_b = FakeResponse.new body_b, 200
-              side_a_results = UrlResult.new compare_url.side_a, response_a, nil
-              side_b_results = UrlResult.new compare_url.side_b, response_b, nil
+              side_a_results = UrlResult.new compare_url.side_a, response_a, nil, 1
+              side_b_results = UrlResult.new compare_url.side_b, response_b, nil, 1
               @result = ComparisonResult.new compare_url, side_a_results, side_b_results
             end
 
@@ -90,8 +90,8 @@ module HotOrNot
           setup do
             response_a = FakeResponse.new 'side_a'
             response_b = FakeResponse.new 'side_b'
-            side_a_results = UrlResult.new @compare_url.side_a, response_a, nil
-            side_b_results = UrlResult.new @compare_url.side_b, response_b, nil
+            side_a_results = UrlResult.new @compare_url.side_a, response_a, nil, 1
+            side_b_results = UrlResult.new @compare_url.side_b, response_b, nil, 1
             @result = ComparisonResult.new @compare_url, side_a_results, side_b_results
           end
 
@@ -114,8 +114,8 @@ module HotOrNot
               body_b = " foo\nbaz"
               response_a = FakeResponse.new body_a, 200
               response_b = FakeResponse.new body_b, 200
-              side_a_results = UrlResult.new compare_url.side_a, response_a, nil
-              side_b_results = UrlResult.new compare_url.side_b, response_b, nil
+              side_a_results = UrlResult.new compare_url.side_a, response_a, nil, 1
+              side_b_results = UrlResult.new compare_url.side_b, response_b, nil, 1
               @result = ComparisonResult.new compare_url, side_a_results, side_b_results
             end
 
@@ -129,8 +129,8 @@ module HotOrNot
           setup do
             response_a = FakeResponse.new 'side_a'
             error_b = RestClient::InternalServerError.new
-            side_a_results = UrlResult.new @compare_url.side_a, response_a, nil
-            side_b_results = UrlResult.new @compare_url.side_b, nil, error_b
+            side_a_results = UrlResult.new @compare_url.side_a, response_a, nil, 1
+            side_b_results = UrlResult.new @compare_url.side_b, nil, error_b, 1
             @result = ComparisonResult.new @compare_url, side_a_results, side_b_results
           end
 

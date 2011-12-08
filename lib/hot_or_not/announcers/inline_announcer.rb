@@ -42,7 +42,7 @@ module HotOrNot
     private
     def say(what, result)
       what += ':'
-      puts "%-10s %-50s %.4fms, %.4fms" % [what, result.full_name, result.side_a_latency, result.side_b_latency]
+      puts "%-10s %-50s %.4fs, %.4fs" % [what, result.full_name, result.side_a_latency, result.side_b_latency]
     end
 
     def results_dir

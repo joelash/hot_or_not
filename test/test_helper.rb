@@ -41,8 +41,8 @@ class Test::Unit::TestCase
     HotOrNot::CompareUrl.new(name, url, 'http://side_a', 'http://side_b').tap do |compare_url|
       response_a, error_a = response_and_error_for body_a, code_a
       response_b, error_b = response_and_error_for body_b, code_b
-      side_a_result = HotOrNot::UrlResult.new compare_url.side_a, response_a, error_a
-      side_b_result = HotOrNot::UrlResult.new compare_url.side_b, response_b, error_b
+      side_a_result = HotOrNot::UrlResult.new compare_url.side_a, response_a, error_a, 1
+      side_b_result = HotOrNot::UrlResult.new compare_url.side_b, response_b, error_b, 1
       HotOrNot::ComparisonResult.expects(:for).with(compare_url).returns HotOrNot::ComparisonResult.new(compare_url, side_a_result, side_b_result)
     end
   end
