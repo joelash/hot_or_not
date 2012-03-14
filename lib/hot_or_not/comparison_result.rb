@@ -84,7 +84,11 @@ module HotOrNot
     def body_by_content_type(result)
       case result.headers[:content_type]
       when /json/i
-        JSON.pretty_generate JSON.parse(result.body).sort
+        begin
+          JSON.pretty_generate JSON.parse(result.body).sort
+        rescue
+          result.body
+        end
       when /html/i
         @compare_url.options[:selector] ? Hpricot(result.body).search(@compare_url.options[:selector]).to_html : result.body
       else

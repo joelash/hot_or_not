@@ -51,6 +51,21 @@ module HotOrNot
             end
           end
 
+          context "and are invalid json" do
+            setup do
+              invalid_json = '{"not":"really"}\n{"json":""}'
+              response_a = FakeResponse.new invalid_json, 200, :content_type => 'application/json'
+              response_b = FakeResponse.new invalid_json, 200, :content_type => 'application/json'
+              side_a_results = UrlResult.new @compare_url.side_a, response_a, nil, 1
+              side_b_results = UrlResult.new @compare_url.side_b, response_b, nil, 1
+              @result = ComparisonResult.new @compare_url, side_a_results, side_b_results
+            end
+
+            should "return success" do
+              assert @result.success?
+            end
+          end
+
           context "inside of a selector" do
             setup do
               compare_url = CompareUrl.new 'Test People', '/api/people', 'http://side_a', 'http://side_b', :selector => 'div#content'
