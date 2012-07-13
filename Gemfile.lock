@@ -29,7 +29,7 @@ PLATFORMS
 DEPENDENCIES
   bundler (~> 1.0.0)
   diffy (~> 2.0.3)
-  facets (~> 2.9.1)
+  facets (= 2.9.1)
   hpricot (~> 0.8.4)
   jeweler (~> 1.8.0)
   json (~> 1.5.2)
