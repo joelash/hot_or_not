@@ -16,6 +16,6 @@ end
 gem 'rake', '~> 0.9.2'
 gem 'rest-client', '~> 1.6.1'
 gem 'diffy', '~> 2.0.3'
-gem 'facets', '= 2.9.1'
+gem 'facets', '~> 2.9.1'
 gem 'json', '~> 1.5.2'
 gem 'hpricot', '~> 0.8.4'
